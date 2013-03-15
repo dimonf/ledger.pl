@@ -6,7 +6,6 @@ use strict;
 use Exporter;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-
 $VERSION			= 1.00;
 @ISA				= qw(Exporter);
 @EXPORT			= ();
@@ -18,7 +17,6 @@ $VERSION			= 1.00;
 use Data::Dumper;
 use Test::Most;
 use Time::HiRes qw/ tv_interval gettimeofday /;
-
 
 sub bin_search {
      my ($array, $target) = @_;
@@ -109,6 +107,8 @@ sub pr_bin_search {
 }
 
 sub get_dates {
+	#quick and dirty way to compile sorted list of dates within 
+	#given range. Each month has 31 days.
 	my ($start_date, $stop_date) = @_;
 	my @start_a = ($start_date =~ /(\d{4}).(\d{2}).(\d{2})/);
 	my @stop_a = ($stop_date =~ /(\d{4}).(\d{2}).(\d{2})/);
@@ -137,9 +137,4 @@ sub get_dates {
 	@dates;
 }
 
-sub timefore($&) {
-		  my $start =  [gettimeofday];
-		  $_[0]->();
-		  explain sprintf "$_[1] took %s time" => tv_interval($start);
-}
 
