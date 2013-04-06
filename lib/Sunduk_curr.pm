@@ -27,9 +27,26 @@ global var %gl_rates is of the following structure:
 
 	$gl_rates->{currency_a}->{currency_b}->{
 		'dates' => [--sorted array of YYYY-MM-DD--],
-		'rates' => {'YYYY-MM-DD' => rate, ... }}
+		'rates' => {'YYYY-MM-DD'->{0=>1.253, r0=>0.798}, ... }}
 
-Within $gl_rates combination currency_a/currency_b is unique, and the following is always true: C<$currency_a lt $currency_b>. This serves to avoid duplication of a give currencies pair in reverse order (for example, $gl_rates->{'USD'}->{'RUB'} and $gl_rates->{'RUB'}->{'USD'}. At the same time, upon storing a rate in $gl_rates, to avoid immediate conversion of a rate, in case the given currencies pair is in 'wrong' order (ie C<$currency_a gt $currency_b>), in such a case the rate is stored as negative float. This results in:
+A rate(s) for a given date are stored in hash key-value pair: 'context_index' => rate. Hence, for a given date more than one rate can be stored. This is done for the following reasons:
+ - a rate can be derived in a specific context: it can be set expli
+
+
+
+The rate itself is stored in array with the first element being the rate itself and the second - 
+For a given pair of currencies only on combination {currency_a}->{currency_b} is maintained to avoid uncertainty in further rate lookup. This is achieved by the following algorythm:
+- the following is always true: C<$currency_a lt $currency_b>
+- the rate value is positive for direct rate and negative for reversed rate. So, for a rate for EUR=1.2USD the following record will be made:
+ C<$gl_rates->{'EUR'}->{'USD'}->{'rates'}->{'YYYY-MM-DD'}->{'d'} = 1.2
+  On the other hand, for the rate USD=0.8333EUR record will look like this:
+ C<$gl_rates->{'EUR'}->{'USD'}->{'rates'}->{'YYYY-MM-DD'}->{'r'} = 0.8333
+Why do we need  
+
+Within $gl_rates combination currency_a/currency_b is unique, and the following test is always true: C<$currency_a lt $currency_b>. 
+
+
+This serves to avoid duplication of a given currencies pair in reversed order (for example, $gl_rates->{'USD'}->{'RUB'} and $gl_rates->{'RUB'}->{'USD'} . At the same time, upon storing a rate in $gl_rates, to avoid immediate conversion of a rate, in case the given currencies pair is in 'wrong' order (ie C<$currency_a gt $currency_b>), in such a case the rate is stored as negative float. This results in:
  RUB/USD  0.03601   will be stored as   $gl_rates->{RUB}->{USD}-{rates}->{YYYY-MM-DD} => 0.03601
  USD/RUB  27.77   will be stored as   $gl_rates->{RUB}->{USD}-{rates}->{YYYY-MM-DD} => -27.77 
 It is important, whenever possible, to avoid 1/rate conversion, which entails rounding.

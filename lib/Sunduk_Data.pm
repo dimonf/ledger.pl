@@ -108,7 +108,7 @@ sub pr_bin_search {
 
 sub get_dates {
 	#quick and dirty way to compile sorted list of dates within 
-	#given range. Each month has 31 days.
+	#given range. Each month has 31 days. All pints are equal.
 	my ($start_date, $stop_date) = @_;
 	my @start_a = ($start_date =~ /(\d{4}).(\d{2}).(\d{2})/);
 	my @stop_a = ($stop_date =~ /(\d{4}).(\d{2}).(\d{2})/);
