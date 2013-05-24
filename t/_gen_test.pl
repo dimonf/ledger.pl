@@ -47,12 +47,6 @@ sub set_init_data {
 	}
 }
 
-sub get_rate {
-		my ($rate_a, $rate_b) = @_;
-		if ($rate_a lt $rate_b) {
-			$h_l->{$rate_a}->{$rate_b}={};
- 		}
-}
 
 set_init_data;
 print Dumper($h_l);

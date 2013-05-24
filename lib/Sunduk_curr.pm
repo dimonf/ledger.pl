@@ -54,11 +54,6 @@ It is important, whenever possible, to avoid 1/rate conversion, which entails ro
 =cut
 
 our $gl_rates;
-
-use Data::Dumper;
-use Test::Most;
-use Time::HiRes qw/ tv_interval gettimeofday /;
-
 use Sunduk_Data qw/bin_search/;
 
 =head2

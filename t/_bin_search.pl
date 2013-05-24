@@ -39,14 +39,16 @@ timefor {
 } "composition of record's list";
 
 
-
 timefor {
-		  push @log, "2008-07-$_ ::" . bin_search(\@list, "2008-07-$_") foreach @records;
+		  push @log, "$_ ::" . bin_search(\@list, "$_") foreach @records;
 }
 "binary search, executed ". $#records . " times on ".scalar(@list).' items ';
 
 timefor {
-		  push @log, "2008-07-$_ : " . pr_bin_search(\@list, "2008-07-$_") foreach  @records;
+		  push @log, "$_ : " . pr_bin_search(\@list, "$_") foreach  @records;
 }
-"proportional binary search, executed " . $#records . " times on ".scalar(@list).' items ';
-#printf "$_\n" foreach @log;
+"proportional binary search, executed " . $#records . " times on ".scalar(@list).' items ' ;
+
+#print Dumper(\@records);
+
+#printf "$_\n" foreach sort @log;
