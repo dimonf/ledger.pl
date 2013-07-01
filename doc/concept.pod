@@ -1,0 +1,37 @@
+
+=head1 Data file parsing
+
+Data file is read twice. At the first time comprehensive data dictionary is compiled, that comprises currencies rates, both determined explicitly in the data file and derived from transactions. At the second stage, rates applied in order to have equivalent of transaction's amount in base currency. Since the base currency can be choosen at will, there is a good chance that a big deal of transactions' base currency equivalent amount shall be calculated at runtime. Some scenarios:
+
+=cut
+
+=head2 example A
+
+2012/02/15 Dividends
+  a:ba:hb          EUR 1000  @USD2.1
+  i:div               EUR 800
+  a:dbt:somebody      EUR 200
+
+=cut
+
+In the transaction above we have enough information to calculate amounts if base currency is USD. This was most probably the case at the moment of the transaction had been recorded. The things got more complicated if we decided to use YEN as the base currency, in which case further calculation shall be made.
+
+=head1 Exchange rates ranking
+
+Say, specific transaction it is necessary to determine exchange rate USD to EUR as at 15 of Feb 2012
+
+=over 1
+
+=item 1 P 2012/02/15 USD EUR0.4761
+
+  explicit rate, applied globally, perfect match
+
+=item 2 <example A, above>: 
+
+  rate defined in an transaction, where all three, the date, the price and base currencies match.
+
+=item 3 base amount, not the rate, is available within an transaction. exchange rate is calculated by dividing currency amount by base amount.
+
+=back
+
+=cut

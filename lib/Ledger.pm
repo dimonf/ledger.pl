@@ -7,7 +7,7 @@ use Getopt::Long;
 use Pod::Usage;
 use strict;
 
-
+package Ledger;
 
 my $fl_data;
 my $flh_data;
@@ -15,10 +15,7 @@ my @posts;
 my @trans;
 my $rates;
 
-## journal constants
-## terminology: 1 transaction has many records
-
-
+# on syntax read comments in data file 
 sub read_data_in {
 	#regexp tokens:
 	my $rx_date = '\d{4}.\d{2}.\d{2}';
@@ -29,9 +26,13 @@ sub read_data_in {
 	my $date_tr_start;
 	my $date_tr_end;
 	my $rates_tr={}; #rates determined in a transaction
+	my $rx_record="^\s+(.+)\s{2,}(($rx_curr)\s*($rx_amount))?\s+(@@\s*($rx_curr)\s*($rx_amount))?";
+	$rx_record .= "()?";
 	while (my $line = <$flh_data>) {
-		if ($is_transaction) {
-			if ($line =~ /^\s+(.+)\s{2,}(($rx_curr)\s*($rx_amount))?\s+(@@\s*($rx_curr)\s*($rx_amount))?/) {
+		if ($line =~ /^\s*[;#]/) {
+			#comment. do nothing
+ 		} elsif ($is_transaction) {
+			if ($line =~ //) {
 				#'acc:acc:acc'[two or more spaces] CURR AMOUNT [@@ CURR AMOUNT | @ CURR RATE] [; comment]
 				print $line;
 				push(@trans,{'acc'=>$1,'curr'=>$3, 'amount'=>$4, $6 => $7});
@@ -42,7 +43,6 @@ sub read_data_in {
 			} else {
 				$is_transaction = 0;
 		 }
-
 
 		} elsif ($line =~ /^($rx_date)\s*([!*])?\s*(\(\S+\))?\s*(.+)\s*?/) {
 			#YYYY/MM/DD [*|!] [(243)] Details of post 

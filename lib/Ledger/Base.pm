@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-package Sunduk_Data;
+package Ledger::Base;
 
 use strict;
 use Exporter;
@@ -20,17 +20,12 @@ use Time::HiRes qw/ tv_interval gettimeofday /;
 
 sub bin_search {
      my ($array, $target) = @_;
-
      # $low is first element that is not too low;
      # $high is the first that is too high
-     #
      my ( $low, $high ) = ( 0, scalar(@$array) );
-
      # Keep trying as long as there are elements that might work.
-     #
      while ( $low < $high ) {
          # Try the middle element.
-
          use integer;
          my $cur = ($low+$high)/2;
          if ($array->[$cur] lt $target) {
@@ -46,7 +41,6 @@ sub pr_bin_search {
     my ($array, $target) = @_;
 
 	#proved to be in fact much slower than regular binary search (bin_search)
-
 
     # $low is first element that is not too low;
     # $high is the first that is too high

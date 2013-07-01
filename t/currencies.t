@@ -1,29 +1,42 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
+#
+use strict;
 
-use Test::Most;
-use Time::HiRes qw/tv_interval gettimeofday/;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 
-use Sunduk_Data qw/get_dates/;
-use Data::Dumper;
+use Test::Most qw(no_plan);
+
+BEGIN {
+	use_ok('Ledger::Base');
+	use_ok('Ledger::Rates');
+}
+
+require_ok('Ledger::Base');
+require_ok('Ledger::Rates');
+
+can_ok('Ledger::Rates',('set_rate'));
+can_ok('Ledger::Base',('get_dates'));
 
 my $h_l={};
 my $g_s={};
 my @all_dates;
-#
+
+my @date_range = ('2001-01-08', '2011-02-20');
 my @currencies = ('USD', 'EUR', 'RUB', 'GBP');
 my $number_of_curr_rates = 10;
-my @date_range = ('2001-01-08', '2011-02-20');
-
-sub timefor {
-	my $start = [gettimeofday];
-	$_[0]->();
-	explain sprintf "$_[1] took %s" => tv_interval($start);
-}
 
 sub set_init_data {
 	my @all_dates = get_dates(@date_range);
+	#
+}
+
+
+
+
+sub set_init_data {
+	my @all_dates = get_dates(@date_range);
+
 	#mimic normal program functioning - getting rates
 	for my $c (@currencies) {
 		for my $s_c (@currencies) {
@@ -48,6 +61,6 @@ sub set_init_data {
 }
 
 
+
 set_init_data;
 print Dumper($h_l);
-
