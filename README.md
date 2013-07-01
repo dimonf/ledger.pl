@@ -38,3 +38,4 @@ Changes to the concept of ledger-cli:
 - explicit data modification / revaluation 
 
 I hope to go as far as to write decent vim plugin.
+
